@@ -1,7 +1,8 @@
 # Bonxai Visualizer
 This project provides an easy-to-use visualization tool for Bonxai voxel grids. 
 
-<img src="viz_demo.png" alt="Screenshot of visualizer output" width="540"/>
+<img src="viz_demo.png" alt="Screenshot of visualizer output" width="400"/>
+<img src="viz_demo2.png" alt="Screenshot of visualizer output" width="600"/>
 
 ## Motivation:
 Although the Bonxai data structure has many advantages over Octomap, it currently lacks visualization tools or Rviz2 integration. To address this, I created a simple OpenGL visualization tool for serialized Bonxai voxel grids.
