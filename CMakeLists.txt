@@ -11,12 +11,12 @@ find_package(OpenGL REQUIRED)
 add_executable(bonxai-viz 
     src/visualizer.cpp)
 
-add_executable(serialization_test
+add_executable(bonxai-viz-serialization-test
     src/serialization_test.cpp)
 
 target_link_libraries(bonxai-viz ${OPENGL_LIBRARIES} glfw)
 target_include_directories(bonxai-viz PUBLIC include)
-target_include_directories(serialization_test PUBLIC include)
+target_include_directories(bonxai-viz-serialization-test PUBLIC include)
 
 install(TARGETS
   bonxai-viz
