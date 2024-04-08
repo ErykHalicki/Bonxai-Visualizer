@@ -8,22 +8,24 @@ This project provides a visualization tool for Bonxai voxel grids. It allows you
 
    ```bash
    git clone https://github.com/ErykHalicki/Bonxai-Visualizer.git
-Navigate to the project directory:
+   '''
+2. Navigate to the project directory:
 
-bash
-Copy code
-cd Bonxai-Visualizer
-Create a build directory:
+   ```bash
+   cd Bonxai-Visualizer
+   ```
+3. Create a build directory:
+   
+   ```bash
+   mkdir build && cd build
+   ```
 
-bash
-Copy code
-mkdir build && cd build
-Configure the build with CMake:
+4. Configure the build with CMake:
 
-bash
-Copy code
-cmake ..
-Build the project:
+   ```bash
+   cmake ..
+   ```
+5. Build the project:
 
 bash
 Copy code
