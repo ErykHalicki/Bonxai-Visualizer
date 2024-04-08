@@ -8,7 +8,7 @@ This project provides a visualization tool for Bonxai voxel grids. It allows you
 
    ```bash
    git clone https://github.com/ErykHalicki/Bonxai-Visualizer.git
-   '''
+   ```
 2. Navigate to the project directory:
 
    ```bash
@@ -25,41 +25,45 @@ This project provides a visualization tool for Bonxai voxel grids. It allows you
    ```bash
    cmake ..
    ```
+   
 5. Build the project:
-
-bash
-Copy code
+```bash
 make
-Install the executables (optional):
+```
 
-bash
-Copy code
+6. Install the executables (optional):
+
+```bash
 sudo make install
-Usage
-Visualizer
+```
+
+
+## Usage
+Bonxai-Visualizer
 To visualize a Bonxai voxel grid, run the visualizer executable followed by the path to the input file:
 
-bash
-Copy code
-./visualizer <input_file>
+```bash
+./bonxai_viz <input_file>
+```
+
 Serialization Test
 The serialization_test executable tests the serialization and deserialization functionality of the Bonxai voxel grids. You can run it without any arguments:
 
-bash
-Copy code
+```bash
 ./serialization_test
-Example
-To create a sphere and store it in a file named test.bx, you can use the following command:
+```
 
-bash
-Copy code
+### Example
+To create a sphere and store it in a file named test.bx, you can use the following command:
+```bash
 ./serialization_test
+```
 Then, you can visualize the generated sphere using the visualizer:
 
-bash
-Copy code
+```bash
 ./visualizer test.bx
-Requirements
+```
+### Requirements
 OpenGL
 GLFW3
 Ensure that these dependencies are installed on your system before building the project.
