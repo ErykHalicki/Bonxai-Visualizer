@@ -60,7 +60,7 @@ or have something similar to this in your c++ project:
 Then, you can visualize the generated data using the visualizer:
 
 ```bash
-./visualizer test.bx
+./bonxai_viz test.bx
 ```
 ### Requirements
 OpenGL
