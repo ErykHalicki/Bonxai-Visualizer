@@ -37,13 +37,13 @@ This project provides a visualization tool for Bonxai voxel grids. It allows you
 To visualize a Bonxai voxel grid, run the visualizer executable followed by the path to the input file:
 
 ```bash
-./bonxai_viz <input_file>
+./bonxai-viz <input_file>
 ```
 
 ### Example
 To create a sphere and store it in a file named test.bx, you can use the following command:
 ```bash
-./serialization_test
+./bonxai-viz-serialization-test
 ```
 or have something similar to this in your c++ project:
 ```cpp
@@ -60,7 +60,7 @@ or have something similar to this in your c++ project:
 Then, you can visualize the generated data using the visualizer:
 
 ```bash
-./bonxai_viz test.bx
+./bonxai-viz test.bx
 ```
 ### Requirements
 OpenGL
