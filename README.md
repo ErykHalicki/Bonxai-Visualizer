@@ -1,6 +1,6 @@
 # Bonxai Visualizer
 This project provides a visualization tool for Bonxai voxel grids. It allows you to visualize and interact with voxel grids stored in the Bonxai format. Below are the installation and usage instructions:
-
+![Screenshot of visualizer output](viz_demo.png "Sample Output")
 ## Installation
 
 1. Clone the repository from GitHub:
