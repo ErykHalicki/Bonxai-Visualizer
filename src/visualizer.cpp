@@ -6,13 +6,13 @@
 #include <sstream>
 #include <vector>
 
-float voxel_resolution=0.05;
-Bonxai::VoxelGrid<float> grid( voxel_resolution );
+float voxel_resolution=0.05;//update this to adapt to the grid
+Bonxai::VoxelGrid<float> grid = Bonxai::VoxelGrid<float>(voxel_resolution);
 
 // Camera variables
 GLfloat cameraPositionX = 0.0f;
 GLfloat cameraPositionY = 0.0f;
-GLfloat cameraPositionZ = -7.0f;
+GLfloat cameraPositionZ = 0.0f;
 
 GLfloat cameraYaw = 0.0f;   // Yaw angle (rotation around the Y-axis)
 GLfloat cameraPitch = 0.0f; // Pitch angle (rotation around the X-axis)
@@ -90,8 +90,8 @@ void drawVoxel(float x, float y, float z, float size, float data) {
     glVertex3f(x - size / 2, y + size / 2, z + size / 2);
     glEnd();
 
-    glColor3f(0.0,0.0,0.5);
-    float thickness = 1.5f; // Set your desired thickness here
+    glColor4f(0.0,0.0,0.5,0.1);
+    float thickness = 1.0f; // Set your desired thickness here
     glLineWidth(thickness);
     glBegin(GL_LINES);
     // Front face
@@ -136,7 +136,7 @@ void drawVoxel(float x, float y, float z, float size, float data) {
 // Function to render the voxel grid
 void renderVoxel(const float& data, const Bonxai::CoordT& coord){
     Bonxai::Point3D pos = grid.coordToPos(coord);
-    drawVoxel(pos.x,pos.y,pos.z,voxel_resolution,data);
+    drawVoxel(pos.y,pos.z,pos.x,grid.resolution,data);
 }
 
 void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
@@ -219,40 +219,49 @@ GLfloat cross(GLfloat Ax, GLfloat Ay, GLfloat Az, GLfloat Bx, GLfloat By, GLfloa
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetCursorPosCallback(window, mouseCallback);
     } 
 }
 
+void updateGridFromFile(std::string inputFileName){
+    std::ifstream inputFile(inputFileName, std::ios::binary);
+    if (!inputFile.is_open()) {
+        std::cerr << "Error: Unable to open file " << inputFileName << std::endl;
+    }
+
+    // Read the header of the file to obtain information about the voxel grid
+    try{
+        char header[256];
+        inputFile.getline(header, 256);
+        Bonxai::HeaderInfo info = Bonxai::GetHeaderInfo(header);
+
+        // Deserialize the voxel grid from the file
+        auto g = Bonxai::Deserialize<float>(inputFile, info);
+        inputFile.close();
+        grid=std::move(g);
+    }
+    catch(...){
+        std::cout<<"could not parse bonxai file\n";
+    }
+}
+
 int main(int argc, char* argv[]) {
-  if (argc != 2) {
-    std::cerr << "Usage: " << argv[0] << " <input_file>" << std::endl;
-    return 1;
-  }
+    if  (argc == 1) {
+        std::cerr << "Usage: " << argv[0] << " <input_file> \n Options: --live for live updating from file" << std::endl;
+        return 1;
+    }
+    bool live=false;
+    for (int i = 1; i < argc; ++i) {
+        if (std::string(argv[i]) == "--live") {
+            live=true;
+        }
+    }
+    updateGridFromFile(argv[1]);
 
-  const std::string inputFileName = argv[1];
-
-  // Open the file for reading
-  std::ifstream inputFile(inputFileName, std::ios::binary);
-  if (!inputFile.is_open()) {
-    std::cerr << "Error: Unable to open file " << inputFileName << std::endl;
-    return 1;
-  }
-
-  // Read the header of the file to obtain information about the voxel grid
-  char header[256];
-  inputFile.getline(header, 256);
-  Bonxai::HeaderInfo info = Bonxai::GetHeaderInfo(header);
-
-  // Deserialize the voxel grid from the file
-  auto grid = Bonxai::Deserialize<float>(inputFile, info);
-
-  // Close the file after deserialization
-  inputFile.close();
-  if (!glfwInit()) {
+    if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW" << std::endl;
         return -1;
     }
-    
-
     // Create a windowed mode window and its OpenGL context
     GLFWwindow* window = glfwCreateWindow(800, 600, "Bonxai Voxel Visualizer", NULL, NULL);
     if (!window) {
@@ -273,6 +282,7 @@ int main(int argc, char* argv[]) {
     glfwSetKeyCallback(window, keyCallback);
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
     // Loop until the user closes the window
+    int frameSinceLastUpdate=0;
     while (!glfwWindowShouldClose(window)) {
         // Process input
         processInput(window);
@@ -283,7 +293,14 @@ int main(int argc, char* argv[]) {
         // Set up the view matrix
         setupCamera();
         setupProjection(800,600);
-
+        if(live){
+            if(frameSinceLastUpdate>30){
+                updateGridFromFile(argv[1]);
+                frameSinceLastUpdate=0;
+            }
+            frameSinceLastUpdate++;
+        }
+            
         // Render the voxel grid
         grid.forEachCell(renderVoxel);
 
